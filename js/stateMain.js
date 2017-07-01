@@ -6,17 +6,18 @@ var StateMain={
     		game.scale.forceOrientation(true, false)
     	}
 
-        game.load.image('sky', 'assets/sky.png');
-        game.load.image('ground', 'images/main/ground.png'); // 400 x 16
+        game.load.image('sky', 'images/main/background.png');
+        game.load.image('platform', 'images/main/platform.png'); // 400 x 16
+        game.load.image('ground', 'images/main/ground.png');
         //game.load.image('star', 'assets/star.png'); // 22 x 24 wide
-        game.load.spritesheet('star','images/main/letters.png', 24, 22 )
+        game.load.spritesheet('letter','images/main/letters.png', 24, 22 )
         game.load.spritesheet('dude', 'images/main/alien.png', 64, 64);
         //game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
     },
     
     create:function()
     {
-        var word = ['C', 'A', 'T', 'T', 'C', 'A', 'C', 'A'];
+        var word = ['C', 'A', 'T'];
 
         //  We're going to be using physics, so enable the Arcade Physics system
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -40,10 +41,10 @@ var StateMain={
         this.ground.body.immovable = true;
 
         //  Now let's create two ledges
-        var ledge = this.platforms.create(400, 400, 'ground');
+        var ledge = this.platforms.create(400, 400, 'platform');
         ledge.body.immovable = true;
 
-        ledge = this.platforms.create(-150, 250, 'ground');
+        ledge = this.platforms.create(-150, 250, 'platform');
         ledge.body.immovable = true;
 
         // The player and its settings
@@ -61,17 +62,27 @@ var StateMain={
         this.player.animations.add('left', [0, 1, 2, 3], 10, true);
         this.player.animations.add('right', [5, 6, 7, 8], 10, true);
 
-        //  Finally some stars to collect
+
+        // LETTERS
+        
+        //  Finally some letter to collect
         this.stars = game.add.group();
 
         //  We will enable physics for any star that is created in this group
         this.stars.enableBody = true;
 
+        // Create array of randomletters based on word
+        var makeARandomLetter = function(){
+            return word[Math.floor(Math.random() * 3)];
+        }
+        var randoms = Array(12).fill(0).map(makeARandomLetter);
+        console.log(randoms)
+
         //  Here we'll create 12 of them evenly spaced apart
-        for (var i = 0; i < word.length; i++)
+        for (var i = 0; i < randoms.length; i++)
         {
             //  Create a star inside of the 'stars' group
-            var star = this.stars.create(i * 70, 0, 'star');
+            var star = this.stars.create(i * 70, 0, 'letter');
 
             //  Let gravity do its thing
             star.body.gravity.y = 300;
@@ -82,7 +93,7 @@ var StateMain={
             // Add a letter to the star
             star.letter = word[i];
 
-            star.frame = this.getSpriteFromLetter(word[i]);
+            star.frame = this.getSpriteFromLetter(randoms[i]);
             
         }
 
@@ -91,7 +102,19 @@ var StateMain={
 
         //  Our controls.
         this.cursors = game.input.keyboard.createCursorKeys();
-        
+
+        // RESULTS WORD
+        // Create Results Word based on Word
+        this.resultWord = game.add.group();
+        for (var i = 0; i < word.length; i++)
+        {
+            //  Create a Result Letter inside of the 'resultWord' group
+            var resultLetter = this.resultWord.create(i * 40, 0, 'letter');
+            resultLetter.letter = word[i];
+            resultLetter.frame = this.getSpriteFromLetter(word[i]);
+        }
+        this.resultWord.x = game.world.centerX - 200;
+        this.resultWord.y = 30;
 
     },
 
