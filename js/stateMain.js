@@ -11,6 +11,7 @@ var StateMain={
         game.load.image('ground', 'images/main/ground.png');
         game.load.image('cat', 'images/main/cat.png');
         game.load.spritesheet('letter','images/main/letters.png', 24, 22 )
+        game.load.spritesheet('letterLge','images/main/lettersLarge.png', 48, 44 )
         game.load.spritesheet('dude', 'images/main/alien.png', 64, 64);
         //game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
     },
@@ -78,7 +79,6 @@ var StateMain={
             return word[Math.floor(Math.random() * word.length)];
         }
         var randoms = Array(12).fill(0).map(makeARandomLetter);
-        console.log(randoms)
 
         //  Here we'll create a number of them evenly spaced apart
         for (var i = 0; i < randoms.length; i++)
@@ -108,10 +108,12 @@ var StateMain={
         // RESULTS WORD
         // Create Results Word based on Word
         this.resultWord = game.add.group();
+        this.resultWord.x = 650;
+        this.resultWord.y = 180;
         for (var i = 0; i < this.word.length; i++)
         {
             //  Create a Result Letter inside of the 'resultWord' group
-            var resultLetter = this.resultWord.create(i * 40, 0, 'letter');
+            var resultLetter = this.resultWord.create(i * 60, 0, 'letterLge');
             resultLetter.letter = this.word[i];
             resultLetter.frame = 26;
 
@@ -134,8 +136,6 @@ var StateMain={
 
     collectLetter: function (player, letterSprite) {
 
-        console.log(letterSprite.letter);
-
         // Removes the letter from the screen
         letterSprite.kill();
 
@@ -144,7 +144,6 @@ var StateMain={
         this.scoreText.text = 'Score: ' + score;
 
         // If letter is in the Word update the Results Word
-        console.log('word ' + this.word);
         var index = this.word.indexOf(letterSprite.letter);
         var frame = Number(letterSprite.letter.charCodeAt(0))-65;
         if (index != -1 ) {
@@ -152,7 +151,18 @@ var StateMain={
             this.resultWord.children[index].frame = frame;
         }
 
-        //game.state.start("StateOver");
+        // If resultWord has all its characters set go to Next Level screen
+        var winningWord = true;
+        for (var i = 0; i < this.resultWord.length; i++) {
+            var letter = this.resultWord.children[i];
+            if (letter.frame == 26) {
+                winningWord = false;
+            }
+        }
+        
+        if (winningWord) {
+           // game.state.start("StateOver");
+        }
 
     },
     
