@@ -16,7 +16,7 @@ var StateMain={
     
     create:function()
     {
-        var word = ['C', 'A', 'T'];
+        var word = ['C', 'A', 'T', 'T', 'C', 'A', 'C', 'A'];
 
         //  We're going to be using physics, so enable the Arcade Physics system
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -45,11 +45,6 @@ var StateMain={
 
         ledge = this.platforms.create(-150, 250, 'ground');
         ledge.body.immovable = true;
-
-        // ------ DUMMY
-        //this.dummy = game.add.sprite(32, game.world.height - 200, 'star');
-        //this.dummy.frame = 4;
-        // -------
 
         // The player and its settings
         this.player = game.add.sprite(32, game.world.height - 150, 'dude');
@@ -87,7 +82,7 @@ var StateMain={
             // Add a letter to the star
             star.letter = word[i];
 
-            star.frame = 4;
+            star.frame = this.getSpriteFromLetter(word[i]);
             
         }
 
@@ -96,7 +91,15 @@ var StateMain={
 
         //  Our controls.
         this.cursors = game.input.keyboard.createCursorKeys();
+        
 
+    },
+
+    getSpriteFromLetter: function(letter) {
+        // Find alphabet index of letter
+        var charCode = letter.charCodeAt(0);
+        var index = Number(charCode) - 65;
+        return index;
     },
 
     collectStar: function (player, star) {
