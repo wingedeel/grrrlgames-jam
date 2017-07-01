@@ -7,14 +7,16 @@ var StateMain={
     	}
 
         game.load.image('sky', 'assets/sky.png');
-        game.load.image('ground', 'assets/platform.png');
-        game.load.image('star', 'assets/star.png');
-        game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+        game.load.image('ground', 'images/main/ground.png'); // 400 x 16
+        //game.load.image('star', 'assets/star.png'); // 22 x 24 wide
+        game.load.spritesheet('star','images/main/letters.png', 24, 22 )
+        game.load.spritesheet('dude', 'images/main/alien.png', 64, 64);
+        //game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
     },
     
     create:function()
     {
-        var word = ['C', 'A', 'T','C', 'A', 'T'];
+        var word = ['C', 'A', 'T'];
 
         //  We're going to be using physics, so enable the Arcade Physics system
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -43,6 +45,11 @@ var StateMain={
 
         ledge = this.platforms.create(-150, 250, 'ground');
         ledge.body.immovable = true;
+
+        // ------ DUMMY
+        //this.dummy = game.add.sprite(32, game.world.height - 200, 'star');
+        //this.dummy.frame = 4;
+        // -------
 
         // The player and its settings
         this.player = game.add.sprite(32, game.world.height - 150, 'dude');
@@ -79,6 +86,9 @@ var StateMain={
 
             // Add a letter to the star
             star.letter = word[i];
+
+            star.frame = 4;
+            
         }
 
         //  The score
@@ -99,7 +109,7 @@ var StateMain={
         score += 10;
         this.scoreText.text = 'Score: ' + score;
 
-        game.state.start("StateOver");
+        //game.state.start("StateOver");
 
     },
     
