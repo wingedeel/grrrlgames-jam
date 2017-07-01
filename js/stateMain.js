@@ -9,7 +9,7 @@ var StateMain={
         game.load.image('sky', 'images/main/background.png');
         game.load.image('platform', 'images/main/platform.png'); // 400 x 16
         game.load.image('ground', 'images/main/ground.png');
-        //game.load.image('star', 'assets/star.png'); // 22 x 24 wide
+        game.load.image('cat', 'images/main/cat.png');
         game.load.spritesheet('letter','images/main/letters.png', 24, 22 )
         game.load.spritesheet('dude', 'images/main/alien.png', 64, 64);
         //game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
@@ -17,7 +17,9 @@ var StateMain={
     
     create:function()
     {
-        var word = ['C', 'A', 'T'];
+        this.word = ['C', 'A', 'T'];
+        //var word = ['C', 'A', 'T'];
+        var word = this.word;
 
         //  We're going to be using physics, so enable the Arcade Physics system
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -66,34 +68,34 @@ var StateMain={
         // LETTERS
         
         //  Finally some letter to collect
-        this.stars = game.add.group();
+        this.letters = game.add.group();
 
-        //  We will enable physics for any star that is created in this group
-        this.stars.enableBody = true;
+        //  We will enable physics for any letter that is created in this group
+        this.letters.enableBody = true;
 
         // Create array of randomletters based on word
         var makeARandomLetter = function(){
-            return word[Math.floor(Math.random() * 3)];
+            return word[Math.floor(Math.random() * word.length)];
         }
         var randoms = Array(12).fill(0).map(makeARandomLetter);
         console.log(randoms)
 
-        //  Here we'll create 12 of them evenly spaced apart
+        //  Here we'll create a number of them evenly spaced apart
         for (var i = 0; i < randoms.length; i++)
         {
-            //  Create a star inside of the 'stars' group
-            var star = this.stars.create(i * 70, 0, 'letter');
+            //  Create a letterSprite inside of the 'letters' group
+            var letterSprite = this.letters.create(i * 70, 0, 'letter');
 
             //  Let gravity do its thing
-            star.body.gravity.y = 300;
+            letterSprite.body.gravity.y = 300;
 
-            //  This just gives each star a slightly random bounce value
-            star.body.bounce.y = 0.7 + Math.random() * 0.2;
+            //  This just gives each letterSprite a slightly random bounce value
+            letterSprite.body.bounce.y = 0.7 + Math.random() * 0.2;
 
-            // Add a letter to the star
-            star.letter = word[i];
+            // Add a letter to the letterSprite
+            letterSprite.letter = randoms[i];
 
-            star.frame = this.getSpriteFromLetter(randoms[i]);
+            letterSprite.frame = this.getSpriteFrameFromLetter(randoms[i]);
             
         }
 
@@ -106,34 +108,49 @@ var StateMain={
         // RESULTS WORD
         // Create Results Word based on Word
         this.resultWord = game.add.group();
-        for (var i = 0; i < word.length; i++)
+        for (var i = 0; i < this.word.length; i++)
         {
             //  Create a Result Letter inside of the 'resultWord' group
             var resultLetter = this.resultWord.create(i * 40, 0, 'letter');
-            resultLetter.letter = word[i];
-            resultLetter.frame = this.getSpriteFromLetter(word[i]);
+            resultLetter.letter = this.word[i];
+            resultLetter.frame = 26;
+
         }
         this.resultWord.x = game.world.centerX - 200;
         this.resultWord.y = 30;
 
+
+        // CAT
+        game.add.sprite(650, 40, 'cat');
+
     },
 
-    getSpriteFromLetter: function(letter) {
+    getSpriteFrameFromLetter: function(letter) {
         // Find alphabet index of letter
         var charCode = letter.charCodeAt(0);
         var index = Number(charCode) - 65;
         return index;
     },
 
-    collectStar: function (player, star) {
+    collectLetter: function (player, letterSprite) {
 
-        console.log(star.letter);
-        // Removes the star from the screen
-        star.kill();
+        console.log(letterSprite.letter);
+
+        // Removes the letter from the screen
+        letterSprite.kill();
 
         //  Add and update the score
         score += 10;
         this.scoreText.text = 'Score: ' + score;
+
+        // If letter is in the Word update the Results Word
+        console.log('word ' + this.word);
+        var index = this.word.indexOf(letterSprite.letter);
+        var frame = Number(letterSprite.letter.charCodeAt(0))-65;
+        if (index != -1 ) {
+            var frame = this.getSpriteFrameFromLetter(letterSprite.letter)
+            this.resultWord.children[index].frame = frame;
+        }
 
         //game.state.start("StateOver");
 
@@ -143,12 +160,12 @@ var StateMain={
 
     update: function () {
 
-        //  Collide the player and the stars with the platforms
+        //  Collide the player and the letters with the platforms
         game.physics.arcade.collide(this.player, this.platforms);
-        game.physics.arcade.collide(this.stars, this.platforms);
+        game.physics.arcade.collide(this.letters, this.platforms);
 
-        //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-        game.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
+        //  Checks to see if the player overlaps with any of the letters, if he does call the collectLetter function
+        game.physics.arcade.overlap(this.player, this.letters, this.collectLetter, null, this);
 
         //  Reset the players velocity (movement)
         this.player.body.velocity.x = 0;
