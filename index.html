@@ -33,11 +33,14 @@ var stars;
 var score = 0;
 var scoreText;
 
+var word = ['C', 'A', 'T','C', 'A', 'T'];
+
 function create() {
 
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
+    // --- BACKGROUND  ---- //
     //  A simple background for our game
     game.add.sprite(0, 0, 'sky');
 
@@ -47,6 +50,8 @@ function create() {
     //  We will enable physics for any object that is created in this group
     platforms.enableBody = true;
 
+
+    // --- GROUND  ---- //
     // Here we create the ground.
     var ground = platforms.create(0, game.world.height - 64, 'ground');
 
@@ -56,6 +61,8 @@ function create() {
     //  This stops it from falling away when you jump on it
     ground.body.immovable = true;
 
+
+    // --- LEDGES  ---- //
     //  Now let's create two ledges
     var ledge = platforms.create(400, 400, 'ground');
     ledge.body.immovable = true;
@@ -63,6 +70,7 @@ function create() {
     ledge = platforms.create(-150, 250, 'ground');
     ledge.body.immovable = true;
 
+    // --- PLAYER  ---- //
     // The player and its settings
     player = game.add.sprite(32, game.world.height - 150, 'dude');
 
@@ -78,6 +86,8 @@ function create() {
     player.animations.add('left', [0, 1, 2, 3], 10, true);
     player.animations.add('right', [5, 6, 7, 8], 10, true);
 
+
+    // --- WORDS / STARS  ---- //
     //  Finally some stars to collect
     stars = game.add.group();
 
@@ -85,7 +95,7 @@ function create() {
     stars.enableBody = true;
 
     //  Here we'll create 12 of them evenly spaced apart
-    for (var i = 0; i < 12; i++)
+    for (var i = 0; i < word.length; i++)
     {
         //  Create a star inside of the 'stars' group
         var star = stars.create(i * 70, 0, 'star');
@@ -97,11 +107,15 @@ function create() {
         star.body.bounce.y = 0.7 + Math.random() * 0.2;
 
         // Add a letter to the star
+        star.letter = word[i];
     }
 
+    // --- SCORE  ---- //
     //  The score
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
+
+    // --- CONTROLS  ---- //
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
     
@@ -114,7 +128,7 @@ function update() {
     game.physics.arcade.collide(stars, platforms);
 
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-    game.physics.arcade.overlap(player, stars, collectStar, null, this);
+    game.physics.arcade.overlap(player, stars, collectLetter, null, this);
 
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
@@ -149,7 +163,17 @@ function update() {
 
 }
 
-function collectStar (player, star) {
+function getSpriteFromLetter (letter) {
+    // Find alphabet index of letter
+   var charCode = letter.charCodeAt(0);
+   var index = Number(charCode) - 65;
+   return index;
+}
+
+function collectLetter (player, star) {
+
+    console.log('collected letter is: ' + star.letter);
+    console.log('char code ' + getSpriteFromLetter(star.letter));
     
     // Removes the star from the screen
     star.kill();
