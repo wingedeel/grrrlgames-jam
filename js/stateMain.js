@@ -13,7 +13,8 @@ var StateMain={
         game.load.spritesheet('letter','images/main/letters.png', 24, 22 )
         game.load.spritesheet('letterLge','images/main/lettersLarge.png', 48, 44 )
         game.load.spritesheet('dude', 'images/main/alien.png', 64, 64);
-        //game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+        game.load.audio("gulp", "sounds/gulp.mp3");
+        game.load.audio("levelOver", "sounds/points.mp3");
     },
     
     create:function()
@@ -65,10 +66,11 @@ var StateMain={
         this.player.animations.add('left', [0, 1, 2, 3], 10, true);
         this.player.animations.add('right', [5, 6, 7, 8], 10, true);
 
+        // SOUND
+        this.gulp = game.add.audio("gulp");
+        this.levelOver = game.add.audio("levelOver");
 
         // LETTERS
-        
-        //  Finally some letter to collect
         this.letters = game.add.group();
 
         //  We will enable physics for any letter that is created in this group
@@ -100,7 +102,7 @@ var StateMain={
         }
 
         //  The score
-        this.scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+        this.scoreText = game.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
 
         //  Our controls.
         this.cursors = game.input.keyboard.createCursorKeys();
@@ -108,8 +110,7 @@ var StateMain={
         // RESULTS WORD
         // Create Results Word based on Word
         this.resultWord = game.add.group();
-        this.resultWord.x = 650;
-        this.resultWord.y = 180;
+        
         for (var i = 0; i < this.word.length; i++)
         {
             //  Create a Result Letter inside of the 'resultWord' group
@@ -118,9 +119,8 @@ var StateMain={
             resultLetter.frame = 26;
 
         }
-        this.resultWord.x = game.world.centerX - 200;
-        this.resultWord.y = 30;
-
+       this.resultWord.x = game.world.centerX  + 40;
+       this.resultWord.y = 40;
 
         // CAT
         game.add.sprite(650, 40, 'cat');
@@ -138,6 +138,8 @@ var StateMain={
 
         // Removes the letter from the screen
         letterSprite.kill();
+
+        this.gulp.play();
 
         //  Add and update the score
         score += 10;
@@ -161,7 +163,8 @@ var StateMain={
         }
         
         if (winningWord) {
-           // game.state.start("StateOver");
+           this.levelOver.play();
+           game.state.start("StateOver");
         }
 
     },

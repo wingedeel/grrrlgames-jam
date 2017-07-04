@@ -1,4 +1,4 @@
-var StateTitle={    
+var StateInstructions={    
     
    preload:function()
     {
@@ -8,41 +8,40 @@ var StateTitle={
     
     create:function()
     {
-       // GAME BACKGROUND
+      // GAME BACKGROUND
         //game.stage.backgroundColor="#26C9FF";
         game.add.sprite(0, 0, 'sky');
 
         // BUTTON START
         this.btnStart = game.add.button(
-       		game.world.centerX,
-       		game.world.centerY+100,
-       		'buttons',
-       		this.startGame,
-       		this,
-       		6,
-       		7,
-       		6
-       	)
+          game.world.centerX,
+          game.world.centerY+100,
+          'buttons',
+          this.startGame,
+          this,
+          6,
+          7,
+          6
+        )
        this.btnStart.anchor.set(0.5, 0.5);
        this.btnStart.bringToTop();
 
 
+        // INSTRUCTION TEXT
        
-
-        // GAME TITLE
-        this.titleText = game.add.text(game.world.centerX, 220, "Tebahpla!",
-          { font: "100px Lobster", 
+        this.inText = game.add.text(game.world.centerX+20, 250, "Find the letters to make the word..." ,
+          { font: "36px Arial", 
             fill: "#FFFFFF", 
-            stroke:"#C02FD5",
-            strokeThickness: 4,
+            stroke:"#FFFFFF",
+            strokeThickness: 2,
             align: "center"
           } )
-        this.titleText.anchor.set(0.5, 0.5);
+        this.inText.anchor.set(0.5, 0.5);
 
     },
 
     startGame: function(){
-    	game.state.start("StateInstructions");
+    	game.state.start("StateMain");
     },
     
     update:function()

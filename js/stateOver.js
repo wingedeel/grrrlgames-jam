@@ -3,6 +3,7 @@ var StateOver={
    preload:function()
     {
        game.load.spritesheet('buttons', 'images/ui/buttons.png', 265, 75);
+       game.load.image('sky', 'images/main/background.png');
     },
     
     create:function()
@@ -10,16 +11,9 @@ var StateOver={
         this.top=0;
         this.bottom = game.height-120;
 
-/*
-        // IPAD FIX 
-        if (screen.height > 764) {
-            // ipad height is 755
-            // centers y pos. Will look like a wide screen film
-            this.background.y = game.world.centerY-this.background.height/2;
-            this.top = this.background.y;
-            this.bottom = this.background.y+this.background.height-120;
-        }
-*/
+        // GAME BACKGROUND
+        game.add.sprite(0, 0, 'sky');
+
         this.btnPlayAgain = game.add.button(
        		game.world.centerX,
        		game.world.centerY+100,
@@ -31,20 +25,31 @@ var StateOver={
        		1
        	)
        this.btnPlayAgain.anchor.set(0.5, 0.5);
+       this.btnPlayAgain.bringToTop();
+
+       // CONGRATS TEXT
+       this.titleText = game.add.text(game.world.centerX, 220, "Well Done!",
+          { font: "100px Lobster", 
+            fill: "#FFFFFF", 
+            stroke:"#C02FD5",
+            strokeThickness: 4,
+            align: "center"
+          } )
+        this.titleText.anchor.set(0.5, 0.5);
 
          // SCORE TEXT
-       this.scoreText = game.add.text(game.world.centerX, this.top+60, score);
+       this.scoreText = game.add.text(game.world.centerX, this.top+110, score);
        this.scoreText.fill = "#000000";
-       this.scoreText.fontSize =  64;
+       this.scoreText.fontSize =  48;
        this.scoreText.anchor.set(0.5, 0.5);
 
-       this.scoreLabel = game.add.text(game.world.centerX, this.top+20, "Score");
+       this.scoreLabel = game.add.text(game.world.centerX, this.top+60, "Score");
        this.scoreLabel.fill = "#000000";
-       this.scoreLabel.fontSize =  32;
+       this.scoreLabel.fontSize =  48;
        this.scoreLabel.anchor.set(0.5, 0.5);
 
-        // GAME BACKGROUND
-        game.stage.backgroundColor="#26C9FF";
+        
+
     },
 
     replay: function () {
