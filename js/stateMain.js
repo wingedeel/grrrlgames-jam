@@ -9,18 +9,25 @@ var StateMain={
         game.load.image('sky', 'images/main/background.png');
         game.load.image('platform', 'images/main/platform.png'); // 400 x 16
         game.load.image('ground', 'images/main/ground.png');
-        game.load.image('cat', 'images/main/cat.png');
+        
         game.load.spritesheet('letter','images/main/letters.png', 24, 22 )
         game.load.spritesheet('letterLge','images/main/lettersLarge.png', 48, 44 )
         game.load.spritesheet('dude', 'images/main/alien.png', 64, 64);
         game.load.audio("gulp", "sounds/gulp.mp3");
         game.load.audio("levelOver", "sounds/points.mp3");
+        // WORD IMAGES
+        game.load.image('cat', 'images/main/cat.png');
+        game.load.image('panda', 'images/main/panda.png');
+
     },
     
     create:function()
     {
-        this.word = ['C', 'A', 'T'];
-        //var word = ['C', 'A', 'T'];
+        
+        this.levelData = gameData[gameLevel];
+
+        this.word = Array.from(this.levelData.word);
+    
         var word = this.word;
 
         //  We're going to be using physics, so enable the Arcade Physics system
@@ -122,14 +129,15 @@ var StateMain={
        this.resultWord.x = game.world.centerX  + 40;
        this.resultWord.y = 40;
 
-        // CAT
-        game.add.sprite(650, 40, 'cat');
+        // WORD PICTURE
+        game.add.sprite(game.world.centerX-140, 20, this.levelData.word);
 
+        
     },
 
     getSpriteFrameFromLetter: function(letter) {
         // Find alphabet index of letter
-        var charCode = letter.charCodeAt(0);
+        var charCode = letter.toUpperCase().charCodeAt(0);
         var index = Number(charCode) - 65;
         return index;
     },
@@ -164,6 +172,7 @@ var StateMain={
         
         if (winningWord) {
            this.levelOver.play();
+           gameLevel++;
            game.state.start("StateOver");
         }
 
