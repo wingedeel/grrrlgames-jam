@@ -142,6 +142,41 @@ var StateMain={
         return index;
     },
 
+     getNextOccurenceOfLetter: function (letter, targetWord) {
+
+        var index = targetWord.indexOf(letter);
+
+        // If substring is in the target string...
+        if (index != -1 ) {
+
+            // Establish how many occurences of this letter are in the word
+            function locations(substring,string){
+              var a=[],i=-1;
+              while((i=string.indexOf(substring,i+1)) >= 0) a.push(i);
+              return a;
+            }
+
+            var occurences = locations(letter,this.word);
+            // Go through each occurence of this letter in the target word.
+            // See if there is a blank target space for it to go into
+            if (occurences.length > 1 ){
+                console.log('there is more than one occurence of ' + letter)
+                for (var j=0; j<occurences.length; j++){
+                    var resultLetter = this.resultWord.children[occurences[j]];
+                    console.log('resultLetter.frame ' + resultLetter.frame);
+                    if (resultLetter.frame == 26) {
+                        index = occurences[j];
+                    }
+                }
+            }
+        
+            
+        }
+        
+         return index;
+    },
+    
+
     collectLetter: function (player, letterSprite) {
 
         // Removes the letter from the screen
@@ -154,18 +189,20 @@ var StateMain={
         this.scoreText.text = 'Score: ' + score;
 
         // If letter is in the Word update the Results Word
-        var index = this.word.indexOf(letterSprite.letter);
-        var frame = Number(letterSprite.letter.charCodeAt(0))-65;
+        // by setting the frame of the appropriate letter
+
+        // See if this letter has an index in the target word
+        var index = this.getNextOccurenceOfLetter(letterSprite.letter, this.word);
         if (index != -1 ) {
             var frame = this.getSpriteFrameFromLetter(letterSprite.letter)
             this.resultWord.children[index].frame = frame;
         }
-
+        
         // If resultWord has all its characters set go to Next Level screen
         var winningWord = true;
         for (var i = 0; i < this.resultWord.length; i++) {
-            var letter = this.resultWord.children[i];
-            if (letter.frame == 26) {
+            var resultLetter = this.resultWord.children[i];
+            if (resultLetter.frame == 26) {
                 winningWord = false;
             }
         }
@@ -177,7 +214,6 @@ var StateMain={
         }
 
     },
-    
     
 
     update: function () {
