@@ -126,11 +126,11 @@ var StateMain={
             resultLetter.frame = 26;
 
         }
-       this.resultWord.x = game.world.centerX  + 40;
+       this.resultWord.x = game.world.centerX-70;
        this.resultWord.y = 40;
 
         // WORD PICTURE
-        game.add.sprite(game.world.centerX-140, 20, this.levelData.word);
+        game.add.sprite(game.world.centerX+270, 20, this.levelData.word);
 
         
     },
