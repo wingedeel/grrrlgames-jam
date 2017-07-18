@@ -28,7 +28,7 @@ var StateOver={
        this.btnPlayAgain.bringToTop();
 
        // CONGRATS TEXT
-       this.titleText = game.add.text(game.world.centerX, 220, "Next Level?",
+       this.titleText = game.add.text(game.world.centerX, 245, "Next Level?",
           { font: "100px Lobster", 
             fill: "#FFFFFF", 
             stroke:"#C02FD5",
@@ -38,17 +38,15 @@ var StateOver={
         this.titleText.anchor.set(0.5, 0.5);
 
          // SCORE TEXT
-       this.scoreText = game.add.text(game.world.centerX, this.top+110, score);
+       this.scoreText = game.add.text(game.world.centerX, this.top+150, score);
        this.scoreText.fill = "#000000";
        this.scoreText.fontSize =  48;
        this.scoreText.anchor.set(0.5, 0.5);
 
-       this.scoreLabel = game.add.text(game.world.centerX, this.top+60, "Score");
+       this.scoreLabel = game.add.text(game.world.centerX, this.top+100, "You Score is ");
        this.scoreLabel.fill = "#000000";
        this.scoreLabel.fontSize =  48;
        this.scoreLabel.anchor.set(0.5, 0.5);
-
-        
 
     },
 

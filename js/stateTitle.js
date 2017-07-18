@@ -30,7 +30,7 @@ var StateTitle={
        
 
         // GAME TITLE
-        this.titleText = game.add.text(game.world.centerX, 220, "Tebahpla!",
+        this.titleText = game.add.text(game.world.centerX, 220, "Alphabet Dash",
           { font: "100px Lobster", 
             fill: "#FFFFFF", 
             stroke:"#C02FD5",

@@ -19,7 +19,7 @@ window.onload = function()
       game=new Phaser.Game(window.innerWidth,window.innerHeight,Phaser.AUTO,"ph_game");  
     }
 
-    $.getJSON("../data/game.json", function(json) {
+    $.getJSON("data/game.json", function(json) {
         gameData = json;
 
         game.state.add("StateMain",StateMain);
