@@ -16,7 +16,8 @@ var StateMain={
         game.load.audio("gulp", "sounds/gulp.mp3");
         game.load.audio("levelOver", "sounds/points.mp3");
         // WORD IMAGES
-        game.load.image('cat', 'images/main/cat.png');
+        game.load.image('cake', 'images/main/cake-02-sml.png');
+        game.load.image('cat', 'images/main/cat-03-sml.png');
         game.load.image('panda', 'images/main/panda.png');
 
     },
@@ -83,14 +84,19 @@ var StateMain={
         //  We will enable physics for any letter that is created in this group
         this.letters.enableBody = true;
 
-        // Create array of randomletters based on word
+        // Create array of random letters based on word
         var makeARandomLetter = function(){
             return word[Math.floor(Math.random() * word.length)];
         }
-        var randoms = Array(12).fill(0).map(makeARandomLetter);
+    
+        var randoms = Array(12-word.length).fill(0).map(makeARandomLetter);
+
+        // Randomise game letters
+        var gameLetters = word.concat(randoms);
+        gameLetters.sort(function(a, b){return 0.5 - Math.random()});
 
         //  Here we'll create a number of them evenly spaced apart
-        for (var i = 0; i < randoms.length; i++)
+        for (var i = 0; i < gameLetters.length; i++)
         {
             //  Create a letterSprite inside of the 'letters' group
             var letterSprite = this.letters.create(i * 70, 0, 'letter');
@@ -102,9 +108,9 @@ var StateMain={
             letterSprite.body.bounce.y = 0.7 + Math.random() * 0.2;
 
             // Add a letter to the letterSprite
-            letterSprite.letter = randoms[i];
+            letterSprite.letter = gameLetters[i];
 
-            letterSprite.frame = this.getSpriteFrameFromLetter(randoms[i]);
+            letterSprite.frame = this.getSpriteFrameFromLetter(gameLetters[i]);
             
         }
 

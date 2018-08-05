@@ -4,7 +4,11 @@
 	"img": "panda.png"
 	},
 	{
+	"word": "cake",
+	"img": "cake-02-sml.png"
+	},
+	{
 	"word": "cat",
-	"img": "cat.png"
+	"img": "cat-03-sml.png"
 	}
 ]

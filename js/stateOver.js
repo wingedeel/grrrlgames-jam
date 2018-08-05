@@ -28,7 +28,7 @@ var StateOver={
        this.btnPlayAgain.bringToTop();
 
        // CONGRATS TEXT
-       this.titleText = game.add.text(game.world.centerX, 245, "Next Level?",
+       this.titleText = game.add.text(game.world.centerX, 245, "Next Word?",
           { font: "100px Lobster", 
             fill: "#FFFFFF", 
             stroke:"#C02FD5",
