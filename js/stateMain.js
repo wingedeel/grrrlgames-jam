@@ -17,8 +17,9 @@ var StateMain={
         game.load.audio("levelOver", "sounds/points.mp3");
         // WORD IMAGES
         game.load.image('cake', 'images/main/cake-02-sml.png');
-        game.load.image('cat', 'images/main/cat-03-sml.png');
+        game.load.image('cat', 'images/main/cat-02-sml.png');
         game.load.image('panda', 'images/main/panda.png');
+        game.load.image('koala', 'images/main/koala-sml.png');
 
     },
     
@@ -166,10 +167,8 @@ var StateMain={
             // Go through each occurence of this letter in the target word.
             // See if there is a blank target space for it to go into
             if (occurences.length > 1 ){
-                console.log('there is more than one occurence of ' + letter)
                 for (var j=0; j<occurences.length; j++){
                     var resultLetter = this.resultWord.children[occurences[j]];
-                    console.log('resultLetter.frame ' + resultLetter.frame);
                     if (resultLetter.frame == 26) {
                         index = occurences[j];
                     }
@@ -215,8 +214,17 @@ var StateMain={
         
         if (winningWord) {
            this.levelOver.play();
-           gameLevel++;
-           game.state.start("StateOver");
+
+           // Check more levels are available
+           var nextLevel = gameData[gameLevel+1];
+           console.log('gameData level', nextLevel);
+           if (nextLevel === undefined) {
+                console.log('GAME OVER! ')
+                game.state.start("StateGameOver");
+           } else {
+            gameLevel++;
+            game.state.start("StateOver");
+          }
         }
 
     },

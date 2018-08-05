@@ -1,5 +1,9 @@
 [
 	{
+	"word": "koala",
+	"img": "koala-sml.png"
+	},
+	{
 	"word": "panda",
 	"img": "panda.png"
 	},
@@ -9,6 +13,6 @@
 	},
 	{
 	"word": "cat",
-	"img": "cat-03-sml.png"
+	"img": "cat-02-sml.png"
 	}
 ]
